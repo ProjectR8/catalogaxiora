@@ -1,0 +1,1582 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- ===================== SEO ===================== -->
+    <title>AXIORA — каталог кондиционеров | купить с установкой в Оренбурге</title>
+    <meta name="description" content="Каталог кондиционеров AXIORA: сплит-системы, мульти-сплит, промышленные кондиционеры. Цены, характеристики, подбор. Установка и гарантия.">
+    <meta name="keywords" content="каталог кондиционеров, купить кондиционер, сплит-система, цены, AXIORA, Оренбург">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://projectr8.github.io/dastish-catalog/">
+
+    <!-- ===================== Open Graph ===================== -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="AXIORA — каталог кондиционеров | купить с установкой">
+    <meta property="og:description" content="Подберите кондиционер в нашем каталоге. Сплит-системы, мульти-сплит, промышленные модели. Цены, доставка, установка.">
+    <meta property="og:url" content="https://projectr8.github.io/dastish-catalog/">
+    <meta property="og:locale" content="ru_RU">
+
+    <!-- ===================== Favicon ===================== -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%237C9CFF%22/></svg>">
+
+    <!-- ===================== Firebase SDK ===================== -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js">
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js">
+    </script>
+
+    <style>
+        :root {
+            --bg-1: #0a0e1a;
+            --bg-2: #131a2e;
+            --accent: #7c9cff;
+            --accent-2: #5eead4;
+            --glass: rgba(255, 255, 255, 0.06);
+            --glass-border: rgba(255, 255, 255, 0.14);
+            --text: #eef1f8;
+            --muted: #9aa4bd;
+            --danger: #ff6b7f;
+            --success: #5eea8b;
+            --card-hover: rgba(255, 255, 255, 0.10);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background:
+                radial-gradient(circle at 20% 20%, rgba(124, 156, 255, 0.25), transparent 40%),
+                radial-gradient(circle at 80% 0%, rgba(94, 234, 212, 0.18), transparent 45%),
+                radial-gradient(circle at 50% 100%, rgba(124, 156, 255, 0.15), transparent 50%),
+                linear-gradient(180deg, var(--bg-1), var(--bg-2));
+            background-attachment: fixed;
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        h1,
+        h2,
+        h3,
+        .logo {
+            font-family: 'Space Grotesk', 'Inter', sans-serif;
+            letter-spacing: -0.02em;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* ——— орбы ——— */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(60px);
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.5;
+        }
+        .orb-1 {
+            width: 420px;
+            height: 420px;
+            background: var(--accent);
+            top: -120px;
+            left: -100px;
+        }
+        .orb-2 {
+            width: 340px;
+            height: 340px;
+            background: var(--accent-2);
+            bottom: -80px;
+            right: -60px;
+        }
+        .orb-3 {
+            width: 200px;
+            height: 200px;
+            background: var(--accent);
+            top: 60%;
+            left: 50%;
+            opacity: 0.3;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ——— glass-класс ——— */
+        .glass {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(20px) saturate(140%);
+            -webkit-backdrop-filter: blur(20px) saturate(140%);
+            border-radius: 24px;
+            box-shadow:
+                0 8px 32px rgba(0, 0, 0, 0.35),
+                inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        }
+
+        /* ——— header ——— */
+        header {
+            position: sticky;
+            top: 16px;
+            z-index: 100;
+            margin: 16px auto 0;
+        }
+        nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 24px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .logo {
+            font-size: 1.15rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        .logo span {
+            color: var(--accent-2);
+        }
+        .nav-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .btn {
+            font-weight: 600;
+            font-size: 0.9rem;
+            padding: 10px 20px;
+            border-radius: 999px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            white-space: nowrap;
+        }
+        .btn-accent {
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            color: #0a0e1a;
+        }
+        .btn-accent:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(124, 156, 255, 0.35);
+        }
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--glass-border);
+            color: var(--text);
+        }
+        .btn-outline:hover {
+            border-color: var(--accent);
+            background: rgba(124, 156, 255, 0.08);
+        }
+        .btn-sm {
+            font-size: 0.8rem;
+            padding: 7px 14px;
+            border-radius: 10px;
+        }
+        .btn-danger {
+            background: rgba(255, 107, 127, 0.2);
+            border: 1px solid rgba(255, 107, 127, 0.4);
+            color: #ff6b7f;
+        }
+        .btn-danger:hover {
+            background: rgba(255, 107, 127, 0.35);
+        }
+        .btn-success {
+            background: rgba(94, 234, 139, 0.2);
+            border: 1px solid rgba(94, 234, 139, 0.4);
+            color: #5eea8b;
+        }
+
+        .cart-badge {
+            position: relative;
+        }
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--accent-2);
+            color: #0a0e1a;
+            font-size: 0.7rem;
+            font-weight: 700;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+        }
+
+        /* ——— hero-mini ——— */
+        .hero-mini {
+            padding: 50px 24px 30px;
+            text-align: center;
+        }
+        .hero-mini h1 {
+            font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        .hero-mini h1 em {
+            font-style: normal;
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .hero-mini p {
+            color: var(--muted);
+            font-size: 0.95rem;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* ——— строка поиска и фильтры ——— */
+        .toolbar {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-bottom: 32px;
+            padding: 16px 20px;
+        }
+        .search-input {
+            flex: 1;
+            min-width: 200px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 14px;
+            padding: 12px 18px;
+            color: var(--text);
+            font-family: inherit;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .search-input::placeholder {
+            color: var(--muted);
+        }
+        .search-input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(124, 156, 255, 0.08);
+        }
+        .filter-select {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 14px;
+            padding: 12px 16px;
+            color: var(--text);
+            font-family: inherit;
+            font-size: 0.9rem;
+            outline: none;
+            cursor: pointer;
+            min-width: 140px;
+            transition: border-color 0.2s;
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239aa4bd' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            padding-right: 36px;
+        }
+        .filter-select:focus {
+            border-color: var(--accent);
+        }
+        .filter-select option {
+            background: #1a2035;
+            color: var(--text);
+        }
+
+        /* ——— сетка товаров ——— */
+        .catalog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            padding-bottom: 40px;
+        }
+        .product-card {
+            padding: 24px;
+            transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        .product-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(124, 156, 255, 0.5);
+            background: var(--card-hover);
+        }
+        .product-card .product-img {
+            width: 100%;
+            aspect-ratio: 1.2/1;
+            border-radius: 16px;
+            object-fit: cover;
+            background: linear-gradient(135deg, rgba(124, 156, 255, 0.2), rgba(94, 234, 212, 0.15));
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            overflow: hidden;
+        }
+        .product-card .product-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 16px;
+        }
+        .product-badge {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: rgba(94, 234, 139, 0.2);
+            border: 1px solid rgba(94, 234, 139, 0.4);
+            color: #5eea8b;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 999px;
+            z-index: 2;
+        }
+        .product-badge.out {
+            background: rgba(255, 107, 127, 0.2);
+            border-color: rgba(255, 107, 127, 0.4);
+            color: #ff6b7f;
+        }
+        .product-card .brand {
+            font-size: 0.75rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 6px;
+        }
+        .product-card h3 {
+            font-size: 1.05rem;
+            margin-bottom: 6px;
+            line-height: 1.3;
+        }
+        .product-card .specs {
+            font-size: 0.8rem;
+            color: var(--muted);
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+        .product-card .price-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: auto;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .product-card .price {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--accent-2);
+            white-space: nowrap;
+        }
+        .product-card .price small {
+            font-size: 0.7rem;
+            color: var(--muted);
+            font-weight: 400;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            grid-column: 1 / -1;
+        }
+        .empty-state .icon {
+            font-size: 3rem;
+            margin-bottom: 16px;
+        }
+        .empty-state h3 {
+            margin-bottom: 8px;
+        }
+        .empty-state p {
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        /* ——— модальные окна ——— */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            animation: fadeIn 0.2s ease;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        @keyframes slideUp {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        .modal {
+            background: #131a2e;
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 32px;
+            max-width: 700px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+            animation: slideUp 0.3s ease;
+            position: relative;
+        }
+        .modal h2 {
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+        .modal .close-btn {
+            position: absolute;
+            top: 16px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: var(--muted);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.2s;
+            z-index: 10;
+        }
+        .modal .close-btn:hover {
+            color: var(--text);
+        }
+        .form-group {
+            margin-bottom: 14px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 0.8rem;
+            color: var(--muted);
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 12px 16px;
+            color: var(--text);
+            font-family: inherit;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(124, 156, 255, 0.06);
+        }
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        /* ——— админ-таблица ——— */
+        .admin-table-wrap {
+            overflow-x: auto;
+            margin: 16px 0;
+        }
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+        .admin-table th,
+        .admin-table td {
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--glass-border);
+            white-space: nowrap;
+        }
+        .admin-table th {
+            color: var(--muted);
+            font-weight: 500;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+        .admin-table tr:hover td {
+            background: rgba(255, 255, 255, 0.03);
+        }
+        .admin-table .actions-cell {
+            display: flex;
+            gap: 6px;
+        }
+
+        /* ——— корзина ——— */
+        .cart-panel {
+            position: fixed;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 420px;
+            max-width: 90vw;
+            background: #111827;
+            border-left: 1px solid var(--glass-border);
+            z-index: 300;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            box-shadow: -10px 0 40px rgba(0, 0, 0, 0.5);
+            overflow-y: auto;
+        }
+        .cart-panel.open {
+            transform: translateX(0);
+        }
+        .cart-panel h3 {
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+        .cart-items {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .cart-item {
+            display: flex;
+            gap: 12px;
+            padding: 12px;
+            background: var(--glass);
+            border-radius: 14px;
+            border: 1px solid var(--glass-border);
+            align-items: center;
+        }
+        .cart-item .ci-img {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            background: rgba(124, 156, 255, 0.2);
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        .cart-item .ci-info {
+            flex: 1;
+            min-width: 0;
+        }
+        .cart-item .ci-info strong {
+            display: block;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .cart-item .ci-info span {
+            font-size: 0.8rem;
+            color: var(--accent-2);
+        }
+        .cart-item .ci-remove {
+            background: none;
+            border: none;
+            color: #ff6b7f;
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 4px 8px;
+        }
+        .cart-total {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--glass-border);
+            font-size: 1.1rem;
+            font-weight: 700;
+            display: flex;
+            justify-content: space-between;
+        }
+        .cart-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 250;
+            display: none;
+        }
+        .cart-overlay.show {
+            display: block;
+        }
+
+        /* ——— toast ——— */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1a2035;
+            border: 1px solid var(--glass-border);
+            padding: 14px 24px;
+            border-radius: 14px;
+            z-index: 400;
+            font-size: 0.9rem;
+            animation: slideUp 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+        .toast.success {
+            border-color: rgba(94, 234, 139, 0.5);
+        }
+        .toast.error {
+            border-color: rgba(255, 107, 127, 0.5);
+        }
+
+        /* ——— footer ——— */
+        footer {
+            text-align: center;
+            padding: 36px 24px 48px;
+            color: var(--muted);
+            font-size: 0.85rem;
+            position: relative;
+            z-index: 1;
+        }
+        footer a {
+            color: var(--accent-2);
+        }
+
+        /* ——— media ——— */
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+            .product-card,
+            .btn {
+                transition: none;
+            }
+            .modal,
+            .cart-panel {
+                animation: none;
+            }
+        }
+        @media (max-width: 768px) {
+            .catalog-grid {
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+                gap: 14px;
+            }
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            .modal {
+                padding: 20px;
+                border-radius: 18px;
+            }
+            .toolbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .filter-select {
+                min-width: auto;
+            }
+            .cart-panel {
+                width: 100vw;
+                max-width: 100vw;
+            }
+            nav {
+                gap: 8px;
+            }
+            .nav-actions {
+                gap: 6px;
+            }
+            .btn {
+                font-size: 0.8rem;
+                padding: 8px 14px;
+            }
+        }
+        @media (max-width: 400px) {
+            .catalog-grid {
+                grid-template-columns: 1fr;
+            }
+            .product-card .price-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
+    <!-- ===================== HEADER ===================== -->
+    <div class="container">
+        <header class="glass">
+            <nav>
+                <div class="logo">AXI<span>ORA</span> <span style="font-size:0.7rem;color:var(--muted);font-weight:400;">каталог</span></div>
+                <div class="nav-actions">
+                    <a href="https://projectr8.github.io/dastish/" class="btn btn-outline btn-sm" title="На основной сайт">← На главную</a>
+                    <button class="btn btn-outline btn-sm" onclick="openAdminLogin()" title="Админ-панель">⚙️ Админ</button>
+                    <button class="btn btn-accent btn-sm cart-badge" onclick="toggleCart()">
+                        🧺 Корзина <span class="cart-count" id="cartCount" style="display:none;">0</span>
+                    </button>
+                </div>
+            </nav>
+        </header>
+    </div>
+
+    <!-- ===================== HERO MINI ===================== -->
+    <section class="hero-mini">
+        <div class="container">
+            <h1>Каталог <em>кондиционеров</em></h1>
+            <p>Подберите идеальную сплит-систему. Все модели доступны с профессиональной установкой и гарантией.</p>
+        </div>
+    </section>
+
+    <!-- ===================== TOOLBAR ===================== -->
+    <div class="container">
+        <div class="toolbar glass" id="toolbar">
+            <input type="text" class="search-input" placeholder="🔍 Поиск по названию или бренду..." id="searchInput" oninput="renderCatalog()">
+            <select class="filter-select" id="filterCategory" onchange="renderCatalog()">
+                <option value="all">Все категории</option>
+                <option value="split">Сплит-системы</option>
+                <option value="multi">Мульти-сплит</option>
+                <option value="industrial">Промышленные</option>
+                <option value="mobile">Мобильные</option>
+            </select>
+            <select class="filter-select" id="filterSort" onchange="renderCatalog()">
+                <option value="default">По умолчанию</option>
+                <option value="price-asc">Цена ↑</option>
+                <option value="price-desc">Цена ↓</option>
+                <option value="name">По названию</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- ===================== CATALOG GRID ===================== -->
+    <div class="container">
+        <div class="catalog-grid" id="catalogGrid">
+            <div class="empty-state">
+                <div class="icon">🌀</div>
+                <h3>Загрузка каталога...</h3>
+                <p>Подключаемся к базе данных</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================== FOOTER ===================== -->
+    <footer>
+        <div class="container">
+            © <span id="year"></span> AXIORA. Каталог кондиционеров. <a href="https://projectr8.github.io/dastish/">Основной сайт</a>
+        </div>
+    </footer>
+
+    <!-- ===================== MODAL: вход в админ-панель ===================== -->
+    <div class="modal-overlay" id="adminLoginOverlay" style="display:none;">
+        <div class="modal" style="max-width:400px;">
+            <button class="close-btn" onclick="closeAdminLogin()">✕</button>
+            <h2>⚙️ Вход в админ-панель</h2>
+            <div class="form-group">
+                <label>Пароль</label>
+                <input type="password" id="adminPassword" placeholder="Введите пароль" onkeydown="if(event.key==='Enter')adminLogin()">
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-accent" onclick="adminLogin()">Войти</button>
+                <button class="btn btn-outline" onclick="closeAdminLogin()">Отмена</button>
+            </div>
+            <p style="font-size:0.7rem;color:var(--muted);margin-top:12px;">По умолчанию: <code>admin123</code> (смените в коде)</p>
+        </div>
+    </div>
+
+    <!-- ===================== MODAL: админ-панель ===================== -->
+    <div class="modal-overlay" id="adminPanelOverlay" style="display:none;">
+        <div class="modal" style="max-width:900px;">
+            <button class="close-btn" onclick="closeAdminPanel()">✕</button>
+            <h2>⚙️ Админ-панель</h2>
+            <p style="color:var(--muted);margin-bottom:16px;font-size:0.85rem;">Управление товарами каталога. Все изменения сохраняются в Firebase мгновенно.</p>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;">
+                <button class="btn btn-accent btn-sm" onclick="openProductForm()">+ Добавить товар</button>
+                <button class="btn btn-outline btn-sm" onclick="seedDemoProducts()">📦 Загрузить демо-товары</button>
+                <button class="btn btn-outline btn-sm" onclick="closeAdminPanel()">Закрыть</button>
+            </div>
+            <div class="admin-table-wrap">
+                <table class="admin-table" id="adminTable">
+                    <thead>
+                        <tr>
+                            <th>Фото</th>
+                            <th>Название</th>
+                            <th>Бренд</th>
+                            <th>Категория</th>
+                            <th>Цена, ₽</th>
+                            <th>В наличии</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminTableBody">
+                        <tr><td colspan="7" style="text-align:center;color:var(--muted);">Загрузка...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================== MODAL: форма товара (добавление/редактирование) ===================== -->
+    <div class="modal-overlay" id="productFormOverlay" style="display:none;">
+        <div class="modal" style="max-width:650px;">
+            <button class="close-btn" onclick="closeProductForm()">✕</button>
+            <h2 id="productFormTitle">Добавить товар</h2>
+            <form id="productForm" onsubmit="saveProduct(event)">
+                <input type="hidden" id="productDocId">
+                <div class="form-group">
+                    <label>Название *</label>
+                    <input type="text" id="prodName" required placeholder="Например: Daikin FTXF25A">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Бренд *</label>
+                        <input type="text" id="prodBrand" required placeholder="Daikin, Mitsubishi, LG...">
+                    </div>
+                    <div class="form-group">
+                        <label>Категория *</label>
+                        <select id="prodCategory" required>
+                            <option value="split">Сплит-система</option>
+                            <option value="multi">Мульти-сплит</option>
+                            <option value="industrial">Промышленный</option>
+                            <option value="mobile">Мобильный</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Цена (₽) *</label>
+                        <input type="number" id="prodPrice" required placeholder="49990" min="0" step="1">
+                    </div>
+                    <div class="form-group">
+                        <label>Мощность (BTU)</label>
+                        <input type="text" id="prodPower" placeholder="9000 BTU">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>URL изображения</label>
+                    <input type="url" id="prodImage" placeholder="https://example.com/photo.jpg">
+                </div>
+                <div class="form-group">
+                    <label>Краткое описание</label>
+                    <textarea id="prodDescription" rows="2" placeholder="Краткие характеристики товара..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Особенности (через запятую)</label>
+                    <input type="text" id="prodFeatures" placeholder="инвертор, тихий режим, Wi-Fi, самоочистка">
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="prodInStock" checked> В наличии
+                    </label>
+                </div>
+                <div class="modal-actions">
+                    <button type="submit" class="btn btn-accent">💾 Сохранить</button>
+                    <button type="button" class="btn btn-outline" onclick="closeProductForm()">Отмена</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ===================== CART OVERLAY ===================== -->
+    <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+
+    <!-- ===================== CART PANEL ===================== -->
+    <div class="cart-panel" id="cartPanel">
+        <button class="close-btn" onclick="toggleCart()" style="position:absolute;top:16px;right:20px;">✕</button>
+        <h3>🧺 Корзина</h3>
+        <div class="cart-items" id="cartItems">
+            <p style="color:var(--muted);text-align:center;padding:40px 0;">Корзина пуста</p>
+        </div>
+        <div class="cart-total" id="cartTotal" style="display:none;">
+            <span>Итого:</span>
+            <span id="cartTotalPrice">0 ₽</span>
+        </div>
+        <button class="btn btn-accent" style="width:100%;margin-top:12px;" onclick="checkout()" id="cartCheckoutBtn" disabled>
+            📩 Оформить заявку
+        </button>
+        <button class="btn btn-outline btn-sm" style="width:100%;margin-top:8px;" onclick="clearCart()">
+            🗑 Очистить корзину
+        </button>
+    </div>
+
+    <!-- ===================== TOAST ===================== -->
+    <div class="toast" id="toast" style="display:none;"></div>
+
+    <!-- ===================== SCRIPTS ===================== -->
+    <script>
+        (function() {
+            // ============ КОНФИГУРАЦИЯ FIREBASE (ЗАМЕНИТЕ НА СВОЮ) ============
+            const firebaseConfig = {
+                apiKey: "AIzaSyBxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+                authDomain: "your-project.firebaseapp.com",
+                projectId: "your-project-id",
+                storageBucket: "your-project.appspot.com",
+                messagingSenderId: "000000000000",
+                appId: "1:000000000000:web:xxxxxxxxxxxxxxxxxxxx"
+            };
+
+            // ============ НАСТРОЙКИ ============
+            const ADMIN_PASSWORD = 'admin123'; // Смените пароль админа здесь
+            const MAIN_SITE_URL = 'https://projectr8.github.io/dastish/';
+            const COLLECTION_NAME = 'products'; // Название коллекции в Firestore
+
+            // ============ ИНИЦИАЛИЗАЦИЯ FIREBASE ============
+            let db = null;
+            let firestoreReady = false;
+
+            try {
+                firebase.initializeApp(firebaseConfig);
+                db = firebase.firestore();
+                firestoreReady = true;
+                console.log('✅ Firebase инициализирован');
+            } catch (e) {
+                console.warn('⚠️ Firebase не инициализирован. Используется локальный режим.', e.message);
+                showToast('База данных не подключена. Используется локальный режим.', 'error');
+            }
+
+            // ============ ГЛОБАЛЬНОЕ СОСТОЯНИЕ ============
+            let allProducts = []; // Все товары из Firestore (или локальные)
+            let cart = JSON.parse(localStorage.getItem('axiora_cart') || '[]');
+            let isAdminLoggedIn = false;
+
+            // ============ ЛОКАЛЬНОЕ ХРАНИЛИЩЕ (если Firebase недоступен) ============
+            function getLocalProducts() {
+                return JSON.parse(localStorage.getItem('axiora_local_products') || '[]');
+            }
+
+            function setLocalProducts(products) {
+                localStorage.setItem('axiora_local_products', JSON.stringify(products));
+            }
+
+            // ============ ДЕМО-ТОВАРЫ ============
+            function getDemoProducts() {
+                return [
+                    { name: 'Daikin FTXF25A / RXF25A', brand: 'Daikin', category: 'split', price: 54990,
+                        power: '9000 BTU',
+                        image: '',
+                        description: 'Инверторная сплит-система. Тихая работа, высокая энергоэффективность A++',
+                        features: ['инвертор', 'тихий режим 19 дБ', 'A++', 'автоочистка'], inStock: true,
+                        createdAt: new Date().toISOString() },
+                    { name: 'Mitsubishi Electric MSZ-LN25VG', brand: 'Mitsubishi Electric', category: 'split',
+                        price: 78990, power: '9000 BTU', image: '',
+                        description: 'Премиум сплит-система с 3D-сенсором. Интеллектуальное управление климатом',
+                        features: ['3D-сенсор', 'Wi-Fi', 'плазменный фильтр', 'инвертор'], inStock: true,
+                        createdAt: new Date().toISOString() },
+                    { name: 'LG Artcool Mirror AC09BQ', brand: 'LG', category: 'split', price: 62990,
+                        power: '9000 BTU',
+                        image: '', description: 'Дизайнерская сплит-система с зеркальной панелью. Инвертор, Wi-Fi',
+                        features: ['зеркальная панель', 'Wi-Fi', 'инвертор', 'ионизатор'], inStock: true,
+                        createdAt: new Date().toISOString() },
+                    { name: 'Ballu BSE-09HN1', brand: 'Ballu', category: 'split', price: 31990, power: '9000 BTU',
+                        image: '', description: 'Бюджетная сплит-система. Надёжная работа, простое управление',
+                        features: ['бюджетная', 'компактная', 'ночной режим'], inStock: true,
+                        createdAt: new Date().toISOString() },
+                    { name: 'Daikin Multi MXS40G', brand: 'Daikin', category: 'multi', price: 124990,
+                        power: '18000 BTU',
+                        image: '', description: 'Наружный блок мульти-сплит на 3 комнаты. Инвертор, тихая работа',
+                        features: ['мульти-сплит', '3 комнаты', 'инвертор', 'A++'], inStock: true,
+                        createdAt: new Date().toISOString() },
+                    { name: 'Mitsubishi Heavy SRK25ZSPR-S', brand: 'Mitsubishi Heavy', category: 'split',
+                        price: 59990, power: '9000 BTU', image: '',
+                        description: 'Инверторная сплит-система с алмазным покрытием теплообменника',
+                        features: ['алмазное покрытие', 'инвертор', 'самоочистка'], inStock: true,
+                        createdAt: new Date().toISOString() },
+                    { name: 'Toshiba RAS-10BKVG-E', brand: 'Toshiba', category: 'split', price: 45990,
+                        power: '9000 BTU',
+                        image: '', description: 'Японская сборка. Инвертор, фильтр высокой очистки',
+                        features: ['Япония', 'инвертор', 'фильтр HEPA', 'тихий'], inStock: false,
+                        createdAt: new Date().toISOString() },
+                    { name: 'Lessar LS-HE09KLA2', brand: 'Lessar', category: 'split', price: 28990, power: '9000 BTU',
+                        image: '', description: 'Доступная сплит-система. Все необходимые режимы',
+                        features: ['доступная', 'компактная', 'ночной режим', 'таймер'], inStock: true,
+                        createdAt: new Date().toISOString() },
+                ];
+            }
+
+            // ============ ЗАГРУЗКА ТОВАРОВ ============
+            async function loadProducts() {
+                if (firestoreReady && db) {
+                    try {
+                        const snapshot = await db.collection(COLLECTION_NAME).orderBy('createdAt',
+                        'desc').get();
+                        allProducts = [];
+                        snapshot.forEach(doc => {
+                            allProducts.push({ id: doc.id, ...doc.data() });
+                        });
+                        if (allProducts.length === 0) {
+                            // Если база пуста — подгружаем из localStorage или предлагаем демо
+                            const local = getLocalProducts();
+                            if (local.length > 0) {
+                                allProducts = local;
+                            } else {
+                                allProducts = [];
+                            }
+                        }
+                    } catch (e) {
+                        console.error('Ошибка загрузки из Firestore:', e);
+                        allProducts = getLocalProducts();
+                        if (allProducts.length === 0) allProducts = getDemoProducts();
+                        showToast('База данных недоступна. Используются локальные данные.', 'error');
+                    }
+                } else {
+                    allProducts = getLocalProducts();
+                    if (allProducts.length === 0) allProducts = getDemoProducts();
+                    if (getLocalProducts().length === 0 && allProducts.length > 0) {
+                        setLocalProducts(allProducts);
+                    }
+                }
+                renderCatalog();
+                if (isAdminLoggedIn) renderAdminTable();
+            }
+
+            // ============ РЕНДЕР КАТАЛОГА ============
+            function renderCatalog() {
+                const grid = document.getElementById('catalogGrid');
+                const searchQuery = document.getElementById('searchInput').value.toLowerCase().trim();
+                const filterCategory = document.getElementById('filterCategory').value;
+                const filterSort = document.getElementById('filterSort').value;
+
+                let filtered = [...allProducts];
+
+                // Поиск
+                if (searchQuery) {
+                    filtered = filtered.filter(p =>
+                        p.name.toLowerCase().includes(searchQuery) ||
+                        (p.brand && p.brand.toLowerCase().includes(searchQuery)) ||
+                        (p.description && p.description.toLowerCase().includes(searchQuery))
+                    );
+                }
+
+                // Фильтр по категории
+                if (filterCategory !== 'all') {
+                    filtered = filtered.filter(p => p.category === filterCategory);
+                }
+
+                // Сортировка
+                if (filterSort === 'price-asc') {
+                    filtered.sort((a, b) => (a.price || 0) - (b.price || 0));
+                } else if (filterSort === 'price-desc') {
+                    filtered.sort((a, b) => (b.price || 0) - (a.price || 0));
+                } else if (filterSort === 'name') {
+                    filtered.sort((a, b) => (a.name || '').localeCompare(b.name || '', 'ru'));
+                }
+
+                if (filtered.length === 0) {
+                    grid.innerHTML = `
+                <div class="empty-state">
+                  <div class="icon">🔍</div>
+                  <h3>Товары не найдены</h3>
+                  <p>Попробуйте изменить параметры поиска или фильтра</p>
+                </div>`;
+                    return;
+                }
+
+                grid.innerHTML = filtered.map(p => {
+                    const featuresStr = (p.features && Array.isArray(p.features)) ?
+                        p.features.slice(0, 3).join(' · ') :
+                        (p.features || '');
+                    const imgContent = p.image ?
+                        `<img src="${p.image}" alt="${p.name}" onerror="this.style.display='none';this.parentElement.textContent='❄️';">` :
+                        '❄️';
+                    const badge = p.inStock === false ?
+                        '<span class="product-badge out">Нет в наличии</span>' :
+                        '<span class="product-badge">В наличии</span>';
+                    const priceFormatted = new Intl.NumberFormat('ru-RU').format(p.price || 0);
+
+                    return `
+                <div class="product-card glass" onclick="openProductDetail('${p.id || ''}')">
+                  ${badge}
+                  <div class="product-img">${imgContent}</div>
+                  <div class="brand">${escapeHTML(p.brand || '')}</div>
+                  <h3>${escapeHTML(p.name || 'Без названия')}</h3>
+                  <div class="specs">${escapeHTML(featuresStr)}${p.power ? ' · ' + escapeHTML(p.power) : ''}</div>
+                  <div class="price-row">
+                    <div class="price">${priceFormatted} <small>₽</small></div>
+                    <button class="btn btn-accent btn-sm" onclick="event.stopPropagation();addToCart('${p.id || ''}')" ${p.inStock===false?'disabled':''}>
+                      ${p.inStock===false ? 'Нет в наличии' : '🛒 В корзину'}
+                    </button>
+                  </div>
+                </div>`;
+                }).join('');
+            }
+
+            function escapeHTML(str) {
+                const div = document.createElement('div');
+                div.textContent = str;
+                return div.innerHTML;
+            }
+
+            // ============ КОРЗИНА ============
+            function addToCart(productId) {
+                const product = allProducts.find(p => p.id === productId);
+                if (!product || product.inStock === false) return;
+                const existing = cart.find(c => c.id === productId);
+                if (existing) {
+                    existing.qty = (existing.qty || 1) + 1;
+                } else {
+                    cart.push({
+                        id: productId,
+                        name: product.name,
+                        price: product.price,
+                        image: product.image,
+                        qty: 1
+                    });
+                }
+                saveCart();
+                updateCartUI();
+                showToast(`✅ "${product.name}" добавлен в корзину`, 'success');
+            }
+
+            function removeFromCart(productId) {
+                cart = cart.filter(c => c.id !== productId);
+                saveCart();
+                updateCartUI();
+            }
+
+            function clearCart() {
+                cart = [];
+                saveCart();
+                updateCartUI();
+                showToast('Корзина очищена', 'error');
+            }
+
+            function saveCart() {
+                localStorage.setItem('axiora_cart', JSON.stringify(cart));
+            }
+
+            function updateCartUI() {
+                const cartCount = document.getElementById('cartCount');
+                const totalQty = cart.reduce((sum, c) => sum + (c.qty || 1), 0);
+                if (totalQty > 0) {
+                    cartCount.textContent = totalQty;
+                    cartCount.style.display = 'flex';
+                } else {
+                    cartCount.style.display = 'none';
+                }
+
+                const cartItems = document.getElementById('cartItems');
+                const cartTotal = document.getElementById('cartTotal');
+                const cartTotalPrice = document.getElementById('cartTotalPrice');
+                const checkoutBtn = document.getElementById('cartCheckoutBtn');
+
+                if (cart.length === 0) {
+                    cartItems.innerHTML =
+                        '<p style="color:var(--muted);text-align:center;padding:40px 0;">Корзина пуста</p>';
+                    cartTotal.style.display = 'none';
+                    checkoutBtn.disabled = true;
+                } else {
+                    cartItems.innerHTML = cart.map(c => {
+                        const priceFormatted = new Intl.NumberFormat('ru-RU').format(c.price || 0);
+                        return `
+                  <div class="cart-item">
+                    <div class="ci-img">${c.image ? `<img src="${c.image}" style="width:100%;height:100%;object-fit:contain;border-radius:10px;" onerror="this.style.display='none';this.parentElement.textContent='❄️';">` : '❄️'}</div>
+                    <div class="ci-info">
+                      <strong>${escapeHTML(c.name)}</strong>
+                      <span>${priceFormatted} ₽ × ${c.qty || 1}</span>
+                    </div>
+                    <button class="ci-remove" onclick="removeFromCart('${c.id}')">✕</button>
+                  </div>`;
+                    }).join('');
+                    cartTotal.style.display = 'flex';
+                    const total = cart.reduce((sum, c) => sum + (c.price || 0) * (c.qty || 1), 0);
+                    cartTotalPrice.textContent = new Intl.NumberFormat('ru-RU').format(total) + ' ₽';
+                    checkoutBtn.disabled = false;
+                }
+            }
+
+            function toggleCart() {
+                const panel = document.getElementById('cartPanel');
+                const overlay = document.getElementById('cartOverlay');
+                const isOpen = panel.classList.contains('open');
+                if (isOpen) {
+                    panel.classList.remove('open');
+                    overlay.classList.remove('show');
+                } else {
+                    panel.classList.add('open');
+                    overlay.classList.add('show');
+                }
+            }
+
+            function checkout() {
+                if (cart.length === 0) return;
+                const total = cart.reduce((sum, c) => sum + (c.price || 0) * (c.qty || 1), 0);
+                const itemsList = cart.map(c =>
+                    `• ${c.name} — ${new Intl.NumberFormat('ru-RU').format(c.price)} ₽ × ${c.qty||1}`
+                ).join('\n');
+                const message =
+                    `Здравствуйте! Хочу заказать:\n\n${itemsList}\n\nИтого: ${new Intl.NumberFormat('ru-RU').format(total)} ₽\n\nПрошу связаться со мной для уточнения деталей.`;
+                const telegramURL = `https://t.me/novaclimate?text=${encodeURIComponent(message)}`;
+                window.open(telegramURL, '_blank');
+                showToast('📩 Открыт Telegram для оформления заявки', 'success');
+            }
+
+            // ============ ДЕТАЛИ ТОВАРА (упрощённо) ============
+            function openProductDetail(productId) {
+                const product = allProducts.find(p => p.id === productId);
+                if (!product) return;
+                const priceFormatted = new Intl.NumberFormat('ru-RU').format(product.price || 0);
+                const featuresStr = (product.features && Array.isArray(product.features)) ?
+                    product.features.map(f => '• ' + f).join('<br>') :
+                    (product.features || '—');
+                const overlay = document.createElement('div');
+                overlay.className = 'modal-overlay';
+                overlay.innerHTML = `
+              <div class="modal" style="max-width:550px;">
+                <button class="close-btn">✕</button>
+                <div class="product-img" style="width:100%;aspect-ratio:1.5/1;border-radius:16px;background:linear-gradient(135deg,rgba(124,156,255,0.2),rgba(94,234,212,0.15));display:flex;align-items:center;justify-content:center;font-size:4rem;margin-bottom:16px;overflow:hidden;">
+                  ${product.image ? `<img src="${product.image}" style="width:100%;height:100%;object-fit:contain;padding:16px;" onerror="this.style.display='none';this.parentElement.textContent='❄️';">` : '❄️'}
+                </div>
+                <div class="brand" style="color:var(--accent);text-transform:uppercase;font-size:0.8rem;">${escapeHTML(product.brand||'')}</div>
+                <h2>${escapeHTML(product.name||'')}</h2>
+                <p style="color:var(--muted);margin:8px 0;">${escapeHTML(product.description||'')}</p>
+                <p style="font-size:0.85rem;color:var(--muted);">Мощность: ${escapeHTML(product.power||'—')}</p>
+                <p style="font-size:0.85rem;color:var(--muted);">Особенности:<br>${featuresStr}</p>
+                <div class="price" style="font-size:1.6rem;color:var(--accent-2);margin:16px 0;">${priceFormatted} <small>₽</small></div>
+                <div class="modal-actions">
+                  <button class="btn btn-accent" id="detailAddToCart" ${product.inStock===false?'disabled':''}>
+                    ${product.inStock===false?'Нет в наличии':'🛒 В корзину'}
+                  </button>
+                  <button class="btn btn-outline close-detail">Закрыть</button>
+                </div>
+              </div>`;
+                document.body.appendChild(overlay);
+
+                const closeDetail = () => overlay.remove();
+                overlay.querySelector('.close-btn').addEventListener('click', closeDetail);
+                overlay.querySelector('.close-detail').addEventListener('click', closeDetail);
+                overlay.addEventListener('click', function(e) { if (e.target === overlay) closeDetail(); });
+                const addBtn = overlay.querySelector('#detailAddToCart');
+                if (addBtn && product.inStock !== false) {
+                    addBtn.addEventListener('click', function() {
+                        addToCart(product.id);
+                        closeDetail();
+                    });
+                }
+            }
+
+            // ============ АДМИН-ПАНЕЛЬ ============
+            function openAdminLogin() {
+                document.getElementById('adminLoginOverlay').style.display = 'flex';
+                document.getElementById('adminPassword').value = '';
+                setTimeout(() => document.getElementById('adminPassword').focus(), 100);
+            }
+
+            function closeAdminLogin() {
+                document.getElementById('adminLoginOverlay').style.display = 'none';
+            }
+
+            function adminLogin() {
+                const password = document.getElementById('adminPassword').value;
+                if (password === ADMIN_PASSWORD) {
+                    isAdminLoggedIn = true;
+                    closeAdminLogin();
+                    document.getElementById('adminPanelOverlay').style.display = 'flex';
+                    renderAdminTable();
+                    showToast('✅ Доступ разрешён. Добро пожаловать в админ-панель!', 'success');
+                } else {
+                    showToast('❌ Неверный пароль', 'error');
+                }
+            }
+
+            function closeAdminPanel() {
+                document.getElementById('adminPanelOverlay').style.display = 'none';
+                isAdminLoggedIn = false;
+            }
+
+            async function renderAdminTable() {
+                const tbody = document.getElementById('adminTableBody');
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--muted);">Загрузка...</td></tr>';
+                await loadProducts();
+                if (allProducts.length === 0) {
+                    tbody.innerHTML =
+                        '<tr><td colspan="7" style="text-align:center;color:var(--muted);">Товаров нет. Добавьте первый товар или загрузите демо.</td></tr>';
+                    return;
+                }
+                tbody.innerHTML = allProducts.map(p => {
+                    const priceFormatted = new Intl.NumberFormat('ru-RU').format(p.price || 0);
+                    return `
+                <tr>
+                  <td>${p.image ? '<span style="font-size:1.5rem;">🖼</span>' : '❄️'}</td>
+                  <td><strong>${escapeHTML(p.name||'')}</strong></td>
+                  <td>${escapeHTML(p.brand||'—')}</td>
+                  <td>${escapeHTML(p.category||'—')}</td>
+                  <td>${priceFormatted} ₽</td>
+                  <td>${p.inStock===false?'❌ Нет':'✅ Да'}</td>
+                  <td class="actions-cell">
+                    <button class="btn btn-outline btn-sm" onclick="editProduct('${p.id}')">✏️</button>
+                    <button class="btn btn-danger btn-sm" onclick="deleteProduct('${p.id}')">🗑</button>
+                  </td>
+                </tr>`;
+                }).join('');
+            }
+
+            function openProductForm(docId = null) {
+                document.getElementById('productFormOverlay').style.display = 'flex';
+                document.getElementById('productDocId').value = docId || '';
+                document.getElementById('productFormTitle').textContent = docId ? 'Редактировать товар' :
+                    'Добавить товар';
+                if (docId) {
+                    const product = allProducts.find(p => p.id === docId);
+                    if (product) {
+                        document.getElementById('prodName').value = product.name || '';
+                        document.getElementById('prodBrand').value = product.brand || '';
+                        document.getElementById('prodCategory').value = product.category || 'split';
+                        document.getElementById('prodPrice').value = product.price || '';
+                        document.getElementById('prodPower').value = product.power || '';
+                        document.getElementById('prodImage').value = product.image || '';
+                        document.getElementById('prodDescription').value = product.description || '';
+                        document.getElementById('prodFeatures').value = (product.features && Array.isArray(product
+                            .features)) ? product.features.join(', ') : '';
+                        document.getElementById('prodInStock').checked = product.inStock !== false;
+                    }
+                } else {
+                    document.getElementById('productForm').reset();
+                    document.getElementById('prodInStock').checked = true;
+                }
+            }
+
+            function closeProductForm() {
+                document.getElementById('productFormOverlay').style.display = 'none';
+            }
+
+            async function saveProduct(event) {
+                event.preventDefault();
+                const docId = document.getElementById('productDocId').value;
+                const productData = {
+                    name: document.getElementById('prodName').value.trim(),
+                    brand: document.getElementById('prodBrand').value.trim(),
+                    category: document.getElementById('prodCategory').value,
+                    price: parseInt(document.getElementById('prodPrice').value) || 0,
+                    power: document.getElementById('prodPower').value.trim(),
+                    image: document.getElementById('prodImage').value.trim(),
+                    description: document.getElementById('prodDescription').value.trim(),
+                    features: document.getElementById('prodFeatures').value.split(',').map(f => f.trim())
+                        .filter(f => f),
+                    inStock: document.getElementById('prodInStock').checked,
+                    updatedAt: new Date().toISOString(),
+                };
+
+                if (!productData.name || !productData.brand || !productData.price) {
+                    showToast('⚠️ Заполните обязательные поля: название, бренд, цена', 'error');
+                    return;
+                }
+
+                if (firestoreReady && db) {
+                    try {
+                        if (docId) {
+                            await db.collection(COLLECTION_NAME).doc(docId).update(productData);
+                            showToast('✅ Товар обновлён в Firebase', 'success');
+                        } else {
+                            productData.createdAt = new Date().toISOString();
+                            await db.collection(COLLECTION_NAME).add(productData);
+                            showToast('✅ Товар добавлен в Firebase', 'success');
+                        }
+                    } catch (e) {
+                        console.error('Ошибка сохранения в Firestore:', e);
+                        // Fallback to local
+                        saveLocally(docId, productData);
+                        showToast('⚠️ Сохранено локально (Firebase недоступен)', 'error');
+                    }
+                } else {
+                    saveLocally(docId, productData);
+                    showToast('✅ Товар сохранён локально', 'success');
+                }
+
+                closeProductForm();
+                await loadProducts();
+                if (isAdminLoggedIn) renderAdminTable();
+            }
+
+            function saveLocally(docId, productData) {
+                let local = getLocalProducts();
+                if (docId) {
+                    const index = local.findIndex(p => p.id === docId);
+                    if (index >= 0) {
+                        local[index] = { ...local[index], ...productData, id: docId };
+                    }
+                } else {
+                    productData.id = 'local_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6);
+                    productData.createdAt = productData.createdAt || new Date().toISOString();
+                    local.unshift(productData);
+                }
+                setLocalProducts(local);
+                allProducts = local;
+            }
+
+            function editProduct(docId) {
+                openProductForm(docId);
+            }
+
+            async function deleteProduct(docId) {
+                if (!confirm('Удалить этот товар? Действие необратимо.')) return;
+                if (firestoreReady && db) {
+                    try {
+                        await db.collection(COLLECTION_NAME).doc(docId).delete();
+                        showToast('🗑 Товар удалён из Firebase', 'success');
+                    } catch (e) {
+                        console.error('Ошибка удаления из Firestore:', e);
+                        deleteLocally(docId);
+                        showToast('⚠️ Удалено локально (Firebase недоступен)', 'error');
+                    }
+                } else {
+                    deleteLocally(docId);
+                    showToast('🗑 Товар удалён локально', 'success');
+                }
+                await loadProducts();
+                if (isAdminLoggedIn) renderAdminTable();
+            }
+
+            function deleteLocally(docId) {
+                let local = getLocalProducts();
+                local = local.filter(p => p.id !== docId);
+                setLocalProducts(local);
+                allProducts = local;
+            }
+
+            async function seedDemoProducts() {
+                if (!confirm('Загрузить 8 демо-товаров в базу? Существующие товары не будут удалены.')) return;
+                const demos = getDemoProducts();
+                if (firestoreReady && db) {
+                    try {
+                        const batch = db.batch();
+                        demos.forEach(d => {
+                            const ref = db.collection(COLLECTION_NAME).doc();
+                            batch.set(ref, { ...d, createdAt: new Date().toISOString() });
+                        });
+                        await batch.commit();
+                        showToast('📦 8 демо-товаров добавлены в Firebase!', 'success');
+                    } catch (e) {
+                        console.error('Ошибка загрузки демо:', e);
+                        // Fallback
+                        let local = getLocalProducts();
+                        demos.forEach(d => {
+                            d.id = 'demo_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6);
+                            d.createdAt = new Date().toISOString();
+                        });
+                        local = [...demos, ...local];
+                        setLocalProducts(local);
+                        allProducts = local;
+                        showToast('⚠️ Демо загружены локально', 'error');
+                    }
+                } else {
+                    let local = getLocalProducts();
+                    demos.forEach(d => {
+                        d.id = 'demo_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6);
+                        d.createdAt = new Date().toISOString();
+                    });
+                    local = [...demos, ...local];
+                    setLocalProducts(local);
+                    allProducts = local;
+                    showToast('📦 Демо-товары загружены локально', 'success');
+                }
+                await loadProducts();
+                if (isAdminLoggedIn) renderAdminTable();
+            }
+
+            // ============ TOAST ============
+            function showToast(message, type = '') {
+                const toast = document.getElementById('toast');
+                toast.textContent = message;
+                toast.className = 'toast ' + type;
+                toast.style.display = 'block';
+                clearTimeout(toast._timeout);
+                toast._timeout = setTimeout(() => { toast.style.display = 'none'; }, 3000);
+            }
+
+            // ============ ЗАКРЫТИЕ МОДАЛОК ПО ОВЕРЛЕЮ ============
+            document.addEventListener('click', function(e) {
+                if (e.target.id === 'adminLoginOverlay') closeAdminLogin();
+                if (e.target.id === 'adminPanelOverlay') closeAdminPanel();
+                if (e.target.id === 'productFormOverlay') closeProductForm();
+            });
+
+            // ============ ГОД В ФУТЕРЕ ============
+            document.getElementById('year').textContent = new Date().getFullYear();
+
+            // ============ ИНИЦИАЛИЗАЦИЯ ============
+            updateCartUI();
+            loadProducts();
+
+            // ============ ЭКСПОРТ В ГЛОБАЛЬНУЮ ОБЛАСТЬ ============
+            window.addToCart = addToCart;
+            window.removeFromCart = removeFromCart;
+            window.clearCart = clearCart;
+            window.toggleCart = toggleCart;
+            window.checkout = checkout;
+            window.openProductDetail = openProductDetail;
+            window.openAdminLogin = openAdminLogin;
+            window.closeAdminLogin = closeAdminLogin;
+            window.adminLogin = adminLogin;
+            window.closeAdminPanel = closeAdminPanel;
+            window.openProductForm = openProductForm;
+            window.closeProductForm = closeProductForm;
+            window.saveProduct = saveProduct;
+            window.editProduct = editProduct;
+            window.deleteProduct = deleteProduct;
+            window.seedDemoProducts = seedDemoProducts;
+            window.renderCatalog = renderCatalog;
+
+            console.log('🟢 AXIORA Каталог готов. Firebase:',
+                firestoreReady ? 'подключён' : 'локальный режим');
+            console.log('   Админ-пароль:', ADMIN_PASSWORD);
+            console.log('   Коллекция Firestore:', COLLECTION_NAME);
+            console.log('   Товаров загружено:', allProducts.length);
+        })();
+    </script>
+
+</body>
+</html>
