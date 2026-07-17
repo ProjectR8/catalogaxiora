@@ -42,6 +42,7 @@
             <g id="icon-package"><path d="M16.5 9.4 7.55 4.24M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><polyline points="3.27 6.96 12 12.01 20.73 6.96" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="12" y1="22.08" x2="12" y2="12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></g>
             <g id="icon-loader"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray="31.4 31.4" stroke-linecap="round"><animateTransform attributeName="transform" type="rotate" from="0 12 12" to="360 12 12" dur="1.5s" repeatCount="indefinite"/></circle></g>
             <g id="icon-empty"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><line x1="8" y1="12" x2="16" y2="12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></g>
+            <g id="icon-close"><line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></g>
         </defs>
     </svg>
 
@@ -192,14 +193,16 @@
             align-items: center;
             flex-wrap: wrap;
         }
+
+        /* ===== УЛУЧШЕННЫЕ КНОПКИ ===== */
         .btn {
             font-weight: 600;
             font-size: clamp(0.78rem, 1.5vw, 0.9rem);
             padding: 10px 18px;
-            border-radius: 999px;
+            border-radius: 14px;
             cursor: pointer;
             border: none;
-            transition: all 0.2s ease;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
             font-family: inherit;
             white-space: nowrap;
             display: inline-flex;
@@ -209,28 +212,70 @@
             min-height: 42px;
             min-width: 42px;
             justify-content: center;
+            position: relative;
+            overflow: hidden;
+            font-size: inherit;
         }
+
+        /* Эффект волны для кнопок */
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+            transform: scale(0);
+            transition: transform 0.5s ease;
+            pointer-events: none;
+        }
+
+        .btn:active::before {
+            transform: scale(2.5);
+            transition: transform 0s;
+        }
+
+        /* Акцентная кнопка */
         .btn-accent {
             background: linear-gradient(135deg, var(--accent), var(--accent-2));
             color: #0a0e1a;
+            box-shadow: 0 4px 15px rgba(124, 156, 255, 0.3);
         }
+
         .btn-accent:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 24px rgba(124, 156, 255, 0.35);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 28px rgba(124, 156, 255, 0.45),
+                        inset 0 1px 0 rgba(255,255,255,0.4);
+            filter: brightness(1.1);
         }
+
         .btn-accent:active {
-            transform: translateY(0);
-            box-shadow: 0 2px 10px rgba(124, 156, 255, 0.2);
+            transform: translateY(-1px);
+            box-shadow: 0 3px 12px rgba(124, 156, 255, 0.3);
         }
+
+        /* Outline кнопка */
         .btn-outline {
-            background: transparent;
-            border: 1px solid var(--glass-border);
-            color: var(--text);
-        }
-        .btn-outline:hover {
-            border-color: var(--accent);
             background: rgba(124, 156, 255, 0.08);
+            border: 1.5px solid var(--accent);
+            color: var(--text);
+            box-shadow: 0 0 0 0 rgba(124, 156, 255, 0);
         }
+
+        .btn-outline:hover {
+            background: rgba(124, 156, 255, 0.15);
+            border-color: var(--accent-2);
+            box-shadow: 0 0 20px rgba(124, 156, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline:active {
+            background: rgba(124, 156, 255, 0.1);
+            transform: translateY(0);
+        }
+
+        /* Маленькие кнопки */
         .btn-sm {
             font-size: 0.8rem;
             padding: 8px 14px;
@@ -238,19 +283,35 @@
             min-height: 38px;
             min-width: 38px;
         }
+
+        /* Опасные кнопки */
         .btn-danger {
-            background: rgba(255, 107, 127, 0.2);
-            border: 1px solid rgba(255, 107, 127, 0.4);
+            background: rgba(255, 107, 127, 0.15);
+            border: 1.5px solid rgba(255, 107, 127, 0.5);
             color: #ff6b7f;
         }
+
         .btn-danger:hover {
-            background: rgba(255, 107, 127, 0.35);
+            background: rgba(255, 107, 127, 0.25);
+            border-color: #ff6b7f;
+            box-shadow: 0 0 20px rgba(255, 107, 127, 0.2);
+            transform: translateY(-2px);
         }
+
+        /* Успешные кнопки */
         .btn-success {
-            background: rgba(94, 234, 139, 0.2);
-            border: 1px solid rgba(94, 234, 139, 0.4);
+            background: rgba(94, 234, 139, 0.15);
+            border: 1.5px solid rgba(94, 234, 139, 0.5);
             color: #5eea8b;
         }
+
+        .btn-success:hover {
+            background: rgba(94, 234, 139, 0.25);
+            border-color: #5eea8b;
+            box-shadow: 0 0 20px rgba(94, 234, 139, 0.2);
+            transform: translateY(-2px);
+        }
+
         .btn:disabled {
             opacity: 0.4;
             pointer-events: none;
@@ -276,6 +337,12 @@
             justify-content: center;
             pointer-events: none;
             line-height: 1;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
         }
 
         .svg-icon {
@@ -344,14 +411,14 @@
         .search-input {
             width: 100%;
             background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--glass-border);
+            border: 1.5px solid var(--glass-border);
             border-radius: 14px;
             padding: 12px 18px 12px 42px;
             color: var(--text);
             font-family: inherit;
             font-size: clamp(0.9rem, 1.5vw, 0.98rem);
             outline: none;
-            transition: border-color 0.2s;
+            transition: all 0.3s ease;
             min-height: 46px;
         }
         .search-input::placeholder {
@@ -359,11 +426,12 @@
         }
         .search-input:focus {
             border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(124, 156, 255, 0.08);
+            background: rgba(124, 156, 255, 0.08);
+            box-shadow: 0 0 20px rgba(124, 156, 255, 0.15);
         }
         .filter-select {
             background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--glass-border);
+            border: 1.5px solid var(--glass-border);
             border-radius: 14px;
             padding: 12px 16px;
             color: var(--text);
@@ -373,7 +441,7 @@
             cursor: pointer;
             min-width: 140px;
             min-height: 46px;
-            transition: border-color 0.2s;
+            transition: all 0.3s ease;
             appearance: none;
             -webkit-appearance: none;
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239aa4bd' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'%3E%3C/path%3E%3C/svg%3E");
@@ -383,6 +451,8 @@
         }
         .filter-select:focus {
             border-color: var(--accent);
+            background-color: rgba(124, 156, 255, 0.08);
+            box-shadow: 0 0 20px rgba(124, 156, 255, 0.15);
         }
         .filter-select option {
             background: #1a2035;
@@ -398,19 +468,22 @@
         }
         .product-card {
             padding: clamp(16px, 2.5vw, 24px);
-            transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
             display: flex;
             flex-direction: column;
             cursor: pointer;
             position: relative;
             overflow: hidden;
             border-radius: 20px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
         }
         @media (hover: hover) {
             .product-card:hover {
-                transform: translateY(-6px);
-                border-color: rgba(124, 156, 255, 0.5);
-                background: var(--card-hover);
+                transform: translateY(-8px);
+                border-color: rgba(124, 156, 255, 0.6);
+                background: rgba(124, 156, 255, 0.08);
+                box-shadow: 0 12px 40px rgba(124, 156, 255, 0.2);
             }
         }
         @media (hover: none) {
@@ -448,19 +521,21 @@
             top: 14px;
             right: 14px;
             background: rgba(94, 234, 139, 0.2);
-            border: 1px solid rgba(94, 234, 139, 0.4);
+            border: 1px solid rgba(94, 234, 139, 0.6);
             color: #5eea8b;
             font-size: 0.7rem;
             font-weight: 600;
-            padding: 4px 10px;
+            padding: 5px 12px;
             border-radius: 999px;
             z-index: 2;
             pointer-events: none;
+            box-shadow: 0 2px 8px rgba(94, 234, 139, 0.15);
         }
         .product-badge.out {
             background: rgba(255, 107, 127, 0.2);
-            border-color: rgba(255, 107, 127, 0.4);
+            border-color: rgba(255, 107, 127, 0.6);
             color: #ff6b7f;
+            box-shadow: 0 2px 8px rgba(255, 107, 127, 0.15);
         }
         .product-card .brand {
             font-size: 0.75rem;
@@ -511,7 +586,14 @@
             color: var(--muted);
             display: flex;
             justify-content: center;
+            animation: float 3s ease-in-out infinite;
         }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
         .empty-state h3 {
             margin-bottom: 8px;
             font-size: 1.1rem;
@@ -533,7 +615,7 @@
             align-items: center;
             justify-content: center;
             padding: 16px;
-            animation: fadeIn 0.2s ease;
+            animation: fadeIn 0.3s ease;
         }
         @keyframes fadeIn {
             from { opacity: 0; }
@@ -552,8 +634,8 @@
             width: 100%;
             max-height: 85vh;
             overflow-y: auto;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
-            animation: slideUp 0.3s ease;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
             position: relative;
             overscroll-behavior: contain;
         }
@@ -566,12 +648,11 @@
             position: absolute;
             top: 14px;
             right: 18px;
-            background: none;
-            border: none;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
             color: var(--muted);
-            font-size: 1.4rem;
             cursor: pointer;
-            transition: color 0.2s;
+            transition: all 0.3s ease;
             z-index: 10;
             width: 36px;
             height: 36px;
@@ -580,10 +661,17 @@
             justify-content: center;
             border-radius: 50%;
             line-height: 1;
+            padding: 0;
+        }
+        .modal .close-btn svg {
+            width: 16px;
+            height: 16px;
         }
         .modal .close-btn:hover {
             color: var(--text);
-            background: rgba(255,255,255,0.05);
+            background: rgba(255,255,255,0.15);
+            border-color: rgba(255,255,255,0.3);
+            transform: rotate(90deg);
         }
         .form-group {
             margin-bottom: 14px;
@@ -601,21 +689,22 @@
         .form-group select {
             width: 100%;
             background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--glass-border);
+            border: 1.5px solid var(--glass-border);
             border-radius: 12px;
             padding: 12px 16px;
             color: var(--text);
             font-family: inherit;
             font-size: 1rem;
             outline: none;
-            transition: border-color 0.2s;
+            transition: all 0.3s ease;
             min-height: 46px;
         }
         .form-group input:focus,
         .form-group textarea:focus,
         .form-group select:focus {
             border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(124, 156, 255, 0.06);
+            background: rgba(124, 156, 255, 0.08);
+            box-shadow: 0 0 20px rgba(124, 156, 255, 0.15);
         }
         .form-group textarea {
             resize: vertical;
@@ -687,7 +776,7 @@
             display: flex;
             flex-direction: column;
             transform: translateX(100%);
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
             box-shadow: -10px 0 40px rgba(0, 0, 0, 0.5);
             overflow-y: auto;
             overscroll-behavior: contain;
@@ -711,10 +800,15 @@
             display: flex;
             gap: 12px;
             padding: 12px;
-            background: var(--glass);
+            background: rgba(124, 156, 255, 0.08);
             border-radius: 14px;
-            border: 1px solid var(--glass-border);
+            border: 1px solid rgba(124, 156, 255, 0.2);
             align-items: center;
+            transition: all 0.3s ease;
+        }
+        .cart-item:hover {
+            background: rgba(124, 156, 255, 0.15);
+            border-color: rgba(124, 156, 255, 0.4);
         }
         .cart-item .ci-img {
             width: 50px;
@@ -749,18 +843,29 @@
             color: var(--accent-2);
         }
         .cart-item .ci-remove {
-            background: none;
-            border: none;
+            background: rgba(255, 107, 127, 0.1);
+            border: 1px solid rgba(255, 107, 127, 0.3);
             color: #ff6b7f;
             cursor: pointer;
-            font-size: 1.2rem;
-            padding: 6px 8px;
+            padding: 8px;
             border-radius: 8px;
             line-height: 1;
-            transition: background 0.2s;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            flex-shrink: 0;
+        }
+        .cart-item .ci-remove svg {
+            width: 15px;
+            height: 15px;
         }
         .cart-item .ci-remove:hover {
-            background: rgba(255,107,127,0.1);
+            background: rgba(255,107,127,0.25);
+            border-color: #ff6b7f;
+            transform: scale(1.1);
         }
         .cart-total {
             margin-top: 16px;
@@ -789,22 +894,24 @@
             left: 50%;
             transform: translateX(-50%);
             background: #1a2035;
-            border: 1px solid var(--glass-border);
+            border: 1.5px solid var(--glass-border);
             padding: 14px 24px;
             border-radius: 14px;
             z-index: 400;
             font-size: 0.9rem;
-            animation: slideUp 0.3s ease;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
             text-align: center;
             max-width: 90vw;
             word-break: break-word;
         }
         .toast.success {
-            border-color: rgba(94, 234, 139, 0.5);
+            border-color: rgba(94, 234, 139, 0.6);
+            background: rgba(94, 234, 139, 0.1);
         }
         .toast.error {
-            border-color: rgba(255, 107, 127, 0.5);
+            border-color: rgba(255, 107, 127, 0.6);
+            background: rgba(255, 107, 127, 0.1);
         }
 
         /* ——— footer ——— */
@@ -818,9 +925,11 @@
         }
         footer a {
             color: var(--accent-2);
+            transition: all 0.3s ease;
         }
         footer a:hover {
             text-decoration: underline;
+            filter: brightness(1.2);
         }
 
         /* ——— media queries ——— */
@@ -1106,7 +1215,7 @@
     <!-- ===================== MODAL: вход в админ-панель ===================== -->
     <div class="modal-overlay" id="adminLoginOverlay" style="display:none;">
         <div class="modal" style="max-width:420px;">
-            <button class="close-btn" onclick="closeAdminLogin()" aria-label="Закрыть">&times;</button>
+            <button class="close-btn" onclick="closeAdminLogin()" aria-label="Закрыть"><svg class="svg-icon" aria-hidden="true"><use href="#icon-close"/></svg></button>
             <h2><svg class="svg-icon" style="vertical-align:middle;margin-right:6px;"><use href="#icon-settings"/></svg> Вход в админ-панель</h2>
             <div class="form-group">
                 <label>Пароль</label>
@@ -1123,7 +1232,7 @@
     <!-- ===================== MODAL: админ-панель ===================== -->
     <div class="modal-overlay" id="adminPanelOverlay" style="display:none;">
         <div class="modal" style="max-width:940px;">
-            <button class="close-btn" onclick="closeAdminPanel()" aria-label="Закрыть">&times;</button>
+            <button class="close-btn" onclick="closeAdminPanel()" aria-label="Закрыть"><svg class="svg-icon" aria-hidden="true"><use href="#icon-close"/></svg></button>
             <h2><svg class="svg-icon" style="vertical-align:middle;margin-right:6px;"><use href="#icon-settings"/></svg> Админ-панель</h2>
             <p style="color:var(--muted);margin-bottom:16px;font-size:0.85rem;">Управление товарами каталога. Все изменения сохраняются в Firebase мгновенно.</p>
             <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;">
@@ -1155,7 +1264,7 @@
     <!-- ===================== MODAL: форма товара (добавление/редактирование) ===================== -->
     <div class="modal-overlay" id="productFormOverlay" style="display:none;">
         <div class="modal" style="max-width:650px;">
-            <button class="close-btn" onclick="closeProductForm()" aria-label="Закрыть">&times;</button>
+            <button class="close-btn" onclick="closeProductForm()" aria-label="Закрыть"><svg class="svg-icon" aria-hidden="true"><use href="#icon-close"/></svg></button>
             <h2 id="productFormTitle">Добавить товар</h2>
             <form id="productForm" onsubmit="saveProduct(event)">
                 <input type="hidden" id="productDocId">
@@ -1218,7 +1327,7 @@
 
     <!-- ===================== CART PANEL ===================== -->
     <div class="cart-panel" id="cartPanel">
-        <button class="close-btn" onclick="toggleCart()" style="position:absolute;top:14px;right:18px;" aria-label="Закрыть корзину">&times;</button>
+        <button class="close-btn" onclick="toggleCart()" style="position:absolute;top:14px;right:18px;" aria-label="Закрыть корзину"><svg class="svg-icon" aria-hidden="true"><use href="#icon-close"/></svg></button>
         <h3><svg class="svg-icon" style="vertical-align:middle;margin-right:6px;"><use href="#icon-cart"/></svg> Корзина</h3>
         <div class="cart-items" id="cartItems">
             <p style="color:var(--muted);text-align:center;padding:40px 0;">Корзина пуста</p>
@@ -1452,7 +1561,7 @@
                     const productId = p.id || '';
 
                     return `
-                        <div class="product-card glass" onclick="openProductDetail('${escapeHTML(productId)}')" role="button" tabindex="0" aria-label="${escapeHTML(p.name)}">
+                        <div class="product-card" onclick="openProductDetail('${escapeHTML(productId)}')" role="button" tabindex="0" aria-label="${escapeHTML(p.name)}">
                             ${badge}
                             <div class="product-img">${imgContent}</div>
                             <div class="brand">${escapeHTML(p.brand || '')}</div>
@@ -1547,7 +1656,7 @@
                                     <strong>${escapeHTML(c.name)}</strong>
                                     <span>${priceFormatted} ₽ &times; ${c.qty || 1}</span>
                                 </div>
-                                <button class="ci-remove" onclick="removeFromCart('${escapeHTML(c.id)}')" aria-label="Удалить">&times;</button>
+                                <button class="ci-remove" onclick="removeFromCart('${escapeHTML(c.id)}')" aria-label="Удалить">${svgIcon('icon-close')}</button>
                             </div>`;
                     }).join('');
                     cartTotal.style.display = 'flex';
@@ -1602,7 +1711,7 @@
                 overlay.className = 'modal-overlay';
                 overlay.innerHTML = `
                     <div class="modal" style="max-width:550px;">
-                        <button class="close-btn" aria-label="Закрыть">&times;</button>
+                        <button class="close-btn" aria-label="Закрыть">${svgIcon('icon-close')}</button>
                         <div style="width:100%;aspect-ratio:1.5/1;border-radius:16px;background:linear-gradient(135deg,rgba(124,156,255,0.2),rgba(94,234,212,0.15));display:flex;align-items:center;justify-content:center;font-size:4rem;margin-bottom:16px;overflow:hidden;">
                             ${imgContent}
                         </div>
