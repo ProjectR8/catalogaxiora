@@ -1149,13 +1149,13 @@
                 <div class="logo">AXI<span>ORA</span> <span style="font-size:0.7rem;color:var(--muted);font-weight:400;">каталог</span></div>
                 <div class="nav-actions">
                     <a href="https://projectr8.github.io/dastish/" class="btn btn-outline btn-sm" title="На основной сайт">
-                        <svg class="svg-icon" aria-hidden="true"><use href="#icon-arrow-left"/></svg> На главную
+                        <svg class="svg-icon" aria-hidden="true" viewBox="0 0 24 24"><use href="#icon-arrow-left"/></svg> На главную
                     </a>
                     <button class="btn btn-outline btn-sm" onclick="openAdminLogin()" title="Админ-панель">
-                        <svg class="svg-icon" aria-hidden="true"><use href="#icon-settings"/></svg> Админ
+                        <svg class="svg-icon" aria-hidden="true" viewBox="0 0 24 24"><use href="#icon-settings"/></svg> Админ
                     </button>
                     <button class="btn btn-accent btn-sm cart-badge" onclick="toggleCart()" aria-label="Корзина">
-                        <svg class="svg-icon" aria-hidden="true"><use href="#icon-cart"/></svg> Корзина
+                        <svg class="svg-icon" aria-hidden="true" viewBox="0 0 24 24"><use href="#icon-cart"/></svg> Корзина
                         <span class="cart-count" id="cartCount" style="display:none;">0</span>
                     </button>
                 </div>
@@ -1175,7 +1175,7 @@
     <div class="container">
         <div class="toolbar glass" id="toolbar">
             <div class="search-wrapper">
-                <svg class="svg-icon search-icon" aria-hidden="true"><use href="#icon-search"/></svg>
+                <svg class="svg-icon search-icon" aria-hidden="true" viewBox="0 0 24 24"><use href="#icon-search"/></svg>
                 <input type="text" class="search-input" placeholder="Поиск по названию или бренду..." id="searchInput" oninput="renderCatalog()" aria-label="Поиск товаров">
             </div>
             <select class="filter-select" id="filterCategory" onchange="renderCatalog()" aria-label="Фильтр по категории">
@@ -1198,7 +1198,7 @@
     <div class="container">
         <div class="catalog-grid" id="catalogGrid">
             <div class="empty-state">
-                <div class="icon"><svg class="svg-icon svg-icon-lg" style="color:var(--accent);opacity:0.6;"><use href="#icon-loader"/></svg></div>
+                <div class="icon"><svg class="svg-icon svg-icon-lg" style="color:var(--accent);opacity:0.6;" viewBox="0 0 24 24"><use href="#icon-loader"/></svg></div>
                 <h3>Загрузка каталога...</h3>
                 <p>Подключаемся к базе данных</p>
             </div>
@@ -1215,8 +1215,8 @@
     <!-- ===================== MODAL: вход в админ-панель ===================== -->
     <div class="modal-overlay" id="adminLoginOverlay" style="display:none;">
         <div class="modal" style="max-width:420px;">
-            <button class="close-btn" onclick="closeAdminLogin()" aria-label="Закрыть"><svg class="svg-icon" aria-hidden="true"><use href="#icon-close"/></svg></button>
-            <h2><svg class="svg-icon" style="vertical-align:middle;margin-right:6px;"><use href="#icon-settings"/></svg> Вход в админ-панель</h2>
+            <button class="close-btn" onclick="closeAdminLogin()" aria-label="Закрыть"><svg class="svg-icon" aria-hidden="true" viewBox="0 0 24 24"><use href="#icon-close"/></svg></button>
+            <h2><svg class="svg-icon" style="vertical-align:middle;margin-right:6px;" viewBox="0 0 24 24"><use href="#icon-settings"/></svg> Вход в админ-панель</h2>
             <div class="form-group">
                 <label>Пароль</label>
                 <input type="password" id="adminPassword" placeholder="Введите пароль" onkeydown="if(event.key==='Enter')adminLogin()" autocomplete="off">
@@ -1232,12 +1232,12 @@
     <!-- ===================== MODAL: админ-панель ===================== -->
     <div class="modal-overlay" id="adminPanelOverlay" style="display:none;">
         <div class="modal" style="max-width:940px;">
-            <button class="close-btn" onclick="closeAdminPanel()" aria-label="Закрыть"><svg class="svg-icon" aria-hidden="true"><use href="#icon-close"/></svg></button>
-            <h2><svg class="svg-icon" style="vertical-align:middle;margin-right:6px;"><use href="#icon-settings"/></svg> Админ-панель</h2>
+            <button class="close-btn" onclick="closeAdminPanel()" aria-label="Закрыть"><svg class="svg-icon" aria-hidden="true" viewBox="0 0 24 24"><use href="#icon-close"/></svg></button>
+            <h2><svg class="svg-icon" style="vertical-align:middle;margin-right:6px;" viewBox="0 0 24 24"><use href="#icon-settings"/></svg> Админ-панель</h2>
             <p style="color:var(--muted);margin-bottom:16px;font-size:0.85rem;">Управление товарами каталога. Все изменения сохраняются в Firebase мгновенно.</p>
             <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;">
-                <button class="btn btn-accent btn-sm" onclick="openProductForm()"><svg class="svg-icon"><use href="#icon-plus"/></svg> Добавить товар</button>
-                <button class="btn btn-outline btn-sm" onclick="seedDemoProducts()"><svg class="svg-icon"><use href="#icon-package"/></svg> Загрузить демо-товары</button>
+                <button class="btn btn-accent btn-sm" onclick="openProductForm()"><svg class="svg-icon" viewBox="0 0 24 24"><use href="#icon-plus"/></svg> Добавить товар</button>
+                <button class="btn btn-outline btn-sm" onclick="seedDemoProducts()"><svg class="svg-icon" viewBox="0 0 24 24"><use href="#icon-package"/></svg> Загрузить демо-товары</button>
                 <button class="btn btn-outline btn-sm" onclick="closeAdminPanel()">Закрыть</button>
             </div>
             <div class="admin-table-wrap">
@@ -1264,7 +1264,7 @@
     <!-- ===================== MODAL: форма товара (добавление/редактирование) ===================== -->
     <div class="modal-overlay" id="productFormOverlay" style="display:none;">
         <div class="modal" style="max-width:650px;">
-            <button class="close-btn" onclick="closeProductForm()" aria-label="Закрыть"><svg class="svg-icon" aria-hidden="true"><use href="#icon-close"/></svg></button>
+            <button class="close-btn" onclick="closeProductForm()" aria-label="Закрыть"><svg class="svg-icon" aria-hidden="true" viewBox="0 0 24 24"><use href="#icon-close"/></svg></button>
             <h2 id="productFormTitle">Добавить товар</h2>
             <form id="productForm" onsubmit="saveProduct(event)">
                 <input type="hidden" id="productDocId">
@@ -1315,7 +1315,7 @@
                     </label>
                 </div>
                 <div class="modal-actions">
-                    <button type="submit" class="btn btn-accent"><svg class="svg-icon"><use href="#icon-check"/></svg> Сохранить</button>
+                    <button type="submit" class="btn btn-accent"><svg class="svg-icon" viewBox="0 0 24 24"><use href="#icon-check"/></svg> Сохранить</button>
                     <button type="button" class="btn btn-outline" onclick="closeProductForm()">Отмена</button>
                 </div>
             </form>
@@ -1327,8 +1327,8 @@
 
     <!-- ===================== CART PANEL ===================== -->
     <div class="cart-panel" id="cartPanel">
-        <button class="close-btn" onclick="toggleCart()" style="position:absolute;top:14px;right:18px;" aria-label="Закрыть корзину"><svg class="svg-icon" aria-hidden="true"><use href="#icon-close"/></svg></button>
-        <h3><svg class="svg-icon" style="vertical-align:middle;margin-right:6px;"><use href="#icon-cart"/></svg> Корзина</h3>
+        <button class="close-btn" onclick="toggleCart()" style="position:absolute;top:14px;right:18px;" aria-label="Закрыть корзину"><svg class="svg-icon" aria-hidden="true" viewBox="0 0 24 24"><use href="#icon-close"/></svg></button>
+        <h3><svg class="svg-icon" style="vertical-align:middle;margin-right:6px;" viewBox="0 0 24 24"><use href="#icon-cart"/></svg> Корзина</h3>
         <div class="cart-items" id="cartItems">
             <p style="color:var(--muted);text-align:center;padding:40px 0;">Корзина пуста</p>
         </div>
@@ -1337,10 +1337,10 @@
             <span id="cartTotalPrice">0 ₽</span>
         </div>
         <button class="btn btn-accent" style="width:100%;margin-top:12px;" onclick="checkout()" id="cartCheckoutBtn" disabled>
-            <svg class="svg-icon"><use href="#icon-check"/></svg> Оформить заявку
+            <svg class="svg-icon" viewBox="0 0 24 24"><use href="#icon-check"/></svg> Оформить заявку
         </button>
         <button class="btn btn-outline btn-sm" style="width:100%;margin-top:8px;" onclick="clearCart()">
-            <svg class="svg-icon"><use href="#icon-trash"/></svg> Очистить корзину
+            <svg class="svg-icon" viewBox="0 0 24 24"><use href="#icon-trash"/></svg> Очистить корзину
         </button>
     </div>
 
@@ -1362,7 +1362,7 @@
             };
 
             // ============ НАСТРОЙКИ ============
-            const ADMIN_PASSWORD = 'admin123';
+            const ADMIN_PASSWORD = 'forexample123';
             const MAIN_SITE_URL = 'https://projectr8.github.io/dastish/';
             const COLLECTION_NAME = 'products';
 
@@ -1505,7 +1505,7 @@
 
             // ============ SVG иконки-хелперы ============
             function svgIcon(href, className = '') {
-                return `<svg class="svg-icon ${className}" aria-hidden="true"><use href="#${href}"/></svg>`;
+                return `<svg class="svg-icon ${className}" aria-hidden="true" viewBox="0 0 24 24"><use href="#${href}"/></svg>`;
             }
 
             // ============ РЕНДЕР КАТАЛОГА ============
